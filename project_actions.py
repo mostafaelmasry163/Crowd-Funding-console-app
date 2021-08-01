@@ -27,7 +27,7 @@ def asking_for_action(user_name):
 
 
 def create_project():
-    print("create")
+    print("create yad")
 
 
 
