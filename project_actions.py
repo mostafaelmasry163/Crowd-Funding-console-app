@@ -1,3 +1,4 @@
+from options import create_project,view_projects,delete_project,search_by_date 
 def asking_for_action(user_name):
     try:
         decision = int(input(f'please {user_name} choose what do you want to do : \n '
@@ -14,48 +15,12 @@ def asking_for_action(user_name):
             create_project()
         elif decision == 2:
             view_projects()
-        elif decision == 3:
+        elif decision == 3 :
             delete_project()
         elif decision == 4:
             search_by_date()
         else:
             print("invalid, try again ")
             asking_for_action(user_name)
-
-
-
-
-
-def create_project():
-    print("create yad")
-
-
-
-
-
-
-def view_projects():
-    print("view")
-
-
-
-
-
-
-
-
-def delete_project():
-    print("delete")
-
-
-
-
-
-
-
-def search_by_date():
-    print("search")
-
-
 
 asking_for_action("omar")
