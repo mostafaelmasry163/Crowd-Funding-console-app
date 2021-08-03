@@ -1,8 +1,9 @@
 # All modules imported here
 from project_actions import Project
+from register import User
 
 # All objects created here ( user object - project object )
-# new_user = User()
+new_user = User()
 new_project = Project()
 
 # Registration or Login
@@ -12,17 +13,16 @@ while True:
                       "Type here :    ")
 
     if user_type == "1":
-        print("Registration")  # call Registeration fn
-        print("Login")  # call login fn
+        new_user.Register_new_user()
         break
     elif user_type == "2":
-        print("Login")  # call login fn
+       # new_user.login()
         break
     else:
         print("invalid , try again")
 ################################################################
 
-new_project.new_action()
+new_project.new_action(new_user.email)
 while True:
     user_decision = input("Do you want to do another thing ? \n"
                           "Enter Y for yes \n"
@@ -32,7 +32,7 @@ while True:
         print("thanks for using our application")
         break
     elif user_decision == "Y":
-        new_project.new_action("") # user.email will be added
+        new_project.new_action(new_user.email) # user.email will be added
     else:
         print("invalid, Try again")
 

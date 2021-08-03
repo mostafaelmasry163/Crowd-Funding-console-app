@@ -1,13 +1,13 @@
 import re
 from openpyxl import load_workbook
 
-filename = "F:\\devops\\python\\crowdfund\\users.xlsx"
+filename = "users.xlsx"
 wb = load_workbook(filename)
 ws = wb.worksheets[0]
 
 class User:
     def __init__(self):
-        pass
+        self.email = ""
     def Register_new_user(self):
         print (">>>>Hello New Crowdfunder<<<<")
         self.get_user_fname()
@@ -35,16 +35,16 @@ class User:
     def get_user_email(self):
         regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
         global email
-        email = input ("Enter your Email:")
+        self.email = input("Enter your Email:")
         j=1
         Flag = 0
         while (ws.cell(j,3).value is not None):
-            if ws.cell(j,3).value == email:
+            if ws.cell(j,3).value == self.email:
                 print("This email is already registered")
                 Flag +=1
                 self.get_user_email()
                 break
-            elif not (re.match(regex_email, email)):
+            elif not (re.match(regex_email, self.email)):
                 print (">>>Enter a valid Email<<<")
                 Flag +=1
                 self.get_user_email()
@@ -79,7 +79,7 @@ class User:
                 i+=1
             ws.cell(i,1).value = fname
             ws.cell(i,2).value = lname
-            ws.cell(i,3).value = email
+            ws.cell(i,3).value = self.email
             ws.cell(i,4).value = password
             ws.cell(i,5).value = mobile
             wb.save(filename)
@@ -92,4 +92,3 @@ class User:
         Pattern = re.compile("(01)?[0-2][0-9]{8}")
         return Pattern.match(s)
 
-new_user = User().Register_new_user()
