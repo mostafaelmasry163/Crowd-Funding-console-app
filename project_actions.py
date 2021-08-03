@@ -1,4 +1,6 @@
-from options import options
+from options import Options
+
+
 
 class Project:
     def __init__(self, user_mail):
@@ -17,9 +19,9 @@ class Project:
             self.new_action()
         else:
             if decision == 1:
-                self.create()
+                Options.create(self)
             elif decision == 2:
-                allprojects = options.findAllProject()
+                allprojects = Options.findAllProject()
                 allprojectskeys = allprojects.keys()
                 print(f'All projects informations \n')
                 for key in allprojectskeys:
@@ -48,3 +50,7 @@ class Project:
 
     def search_by_date(self):
         print("search")
+
+
+
+project1 = Project.new_action(Project)

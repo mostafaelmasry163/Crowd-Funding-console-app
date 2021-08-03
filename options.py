@@ -7,7 +7,7 @@ projectsdatabook = openpyxl.load_workbook("projects_data.xlsx")
 projectsdata = projectsdatabook["Sheet1"]
 
 
-class options :
+class Options :
     # View All Projects
     def findAllProject():
         allProjectsDictionry = {}
@@ -33,7 +33,7 @@ class options :
 
         # Getting project title and make sure that there is no similar title and it is not empty
         title = input("please, enter project title :  ")
-        validation.titlevalidation(title)
+        validation.Validation.titlevalidation(title)
 
         # Getting project details
         details = input("please, enter project details :  ")
@@ -41,17 +41,17 @@ class options :
 
         # Get and validate project total target
         total_target = input("please, enter project total target :  ")
-        validation.targetvalidation(total_target)
+        validation.Validation.targetvalidation(total_target)
 
         # Get campaign start date
         user_start_date = input(
             "please, enter project start date in form [Day/Month/Year] :  ")
-        validation.startdatevalidation(user_start_date)       
+        validation.Validation.startdatevalidation(user_start_date)       
 
         # Get campaign start date
         user_end_date = input(
             "please, enter project end date in form [Day/Month/Year] :  ")
-        validation.endDatevalidation(user_start_date, user_end_date)
+        validation.Validation.endDatevalidation(user_start_date, user_end_date)
 
         # showing project data
         os.system('clear')
@@ -65,7 +65,7 @@ class options :
         i = projectsdata.max_row+1
         while projectsdata.cell(i, 6).value is not None:
             i += 1
-        projectsdata.cell(i, 6).value = self.user_mail
+        # projectsdata.cell(i, 6).value = self.user_mail
         projectsdata.cell(i, 1).value = title
         projectsdata.cell(i, 2).value = details
         projectsdata.cell(i, 3).value = total_target

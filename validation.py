@@ -22,13 +22,13 @@ class Validation :
         os.system('clear')
 
     def targetvalidation(target):
-        while (not total_target) or (total_target.isdigit() is False):
-            if not total_target:
+        while (not target) or (target.isdigit() is False):
+            if not target:
                 print("target should have at least one digit")
-                total_target = input("please, enter project total target :  ")
-            elif total_target.isdigit() is False:
+                target = input("please, enter project total target :  ")
+            elif target.isdigit() is False:
                 print("project target can be only digits")
-                total_target = input("please, enter project total target :  ")
+                target = input("please, enter project total target :  ")
         os.system('clear')
 
     def startdatevalidation(date):
