@@ -2,7 +2,8 @@
 from project_actions import Project
 
 # All objects created here ( user object - project object )
-new_project = Project("new_user.email")
+# new_user = User()
+new_project = Project()
 
 # Registration or Login
 while True:
@@ -31,7 +32,7 @@ while True:
         print("thanks for using our application")
         break
     elif user_decision == "Y":
-        new_project.new_action()
+        new_project.new_action("") # user.email will be added
     else:
         print("invalid, Try again")
 
