@@ -93,3 +93,26 @@ class User:
         return Pattern.match(s)
 
 new_user = User().Register_new_user()
+# login starts from here
+def login():
+    email = input("please enter your email to login : ")
+    password = str(input("please enter your password to login : "))
+
+    from openpyxl import load_workbook
+    workbook = load_workbook(F:\\devops\\python\\crowdfund\\users.xlsx) #put file path
+    sheet = workbook.active
+    i = 1
+    for row in sheet.iter_rows(min_row=2,max_row=100,min_col=3,max_col=4,values_only=True):
+
+      if row[0] == email and row[1] == password:
+          print("login successfully")
+          #take action function call
+    else:
+          print("Invalid email or password")
+          x = int(input("To try again press (1)   For Registration press (2)   "))
+          if x == 1:
+             login()
+          if x == 2:
+             get_user_fname()
+
+login()
