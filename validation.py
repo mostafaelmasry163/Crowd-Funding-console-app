@@ -20,6 +20,7 @@ class Validation :
             else:
                 j += 1
         os.system('clear')
+        return title
 
     def targetvalidation(target):
         while (not target) or (target.isdigit() is False):
@@ -30,6 +31,7 @@ class Validation :
                 print("project target can be only digits")
                 target = input("please, enter project total target :  ")
         os.system('clear')
+        return target
 
     def startdatevalidation(date):
         condition = True
@@ -48,6 +50,7 @@ class Validation :
                 date = input(
                     "please, enter project start date in form [Day/Month/Year] :  ")
         os.system('clear')
+        return date
 
     def endDatevalidation(start,end):
         condition2 = True
@@ -65,6 +68,7 @@ class Validation :
                     condition2 = True
             except:
                 print("invalid formula")
-                user_end_date = input(
+                end = input(
                     "please, enter project end date in form [Day/Month/Year] :  ")
         os.system('clear')
+        return end

@@ -33,7 +33,7 @@ class Options :
 
         # Getting project title and make sure that there is no similar title and it is not empty
         title = input("please, enter project title :  ")
-        validation.Validation.titlevalidation(title)
+        title = validation.Validation.titlevalidation(title)
 
         # Getting project details
         details = input("please, enter project details :  ")
@@ -41,17 +41,17 @@ class Options :
 
         # Get and validate project total target
         total_target = input("please, enter project total target :  ")
-        validation.Validation.targetvalidation(total_target)
+        total_target = validation.Validation.targetvalidation(total_target)
 
         # Get campaign start date
         user_start_date = input(
             "please, enter project start date in form [Day/Month/Year] :  ")
-        validation.Validation.startdatevalidation(user_start_date)       
+        user_start_date = validation.Validation.startdatevalidation(user_start_date)       
 
         # Get campaign start date
         user_end_date = input(
             "please, enter project end date in form [Day/Month/Year] :  ")
-        validation.Validation.endDatevalidation(user_start_date, user_end_date)
+        user_end_date = validation.Validation.endDatevalidation(user_start_date, user_end_date)
 
         # showing project data
         os.system('clear')
