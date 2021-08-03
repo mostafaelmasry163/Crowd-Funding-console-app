@@ -7,9 +7,11 @@ ws = wb.worksheets[0]
 
 class User:
     def __init__(self):
-        print (">>>>Hello New User<<<<")
+        pass
+    def Register_new_user(self):
+        print (">>>>Hello New Crowdfunder<<<<")
         self.get_user_fname()
-    
+
     def get_user_fname(self):
         global fname
         fname = input ("Enter your First name:")
@@ -90,4 +92,4 @@ class User:
         Pattern = re.compile("(01)?[0-2][0-9]{8}")
         return Pattern.match(s)
 
-new_user = User()
+new_user = User().Register_new_user()
