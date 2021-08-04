@@ -15,7 +15,7 @@ class Project:
                                  f' type here : '))
         except:
             print("invalid, try again ")
-            self.new_action()
+            self.new_action(email)
         else:
             if decision == 1:
                 self.create(email)
@@ -27,7 +27,7 @@ class Project:
                 self.search_by_date()
             else:
                 print("invalid, try again ")
-                self.new_action()
+                self.new_action(email)
 
     def create(self, email):
         # clearing console
