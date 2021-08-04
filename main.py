@@ -16,7 +16,7 @@ while True:
         new_user.Register_new_user()
         break
     elif user_type == "2":
-       # new_user.login()
+        new_user.login()
         break
     else:
         print("invalid , try again")
@@ -32,7 +32,7 @@ while True:
         print("thanks for using our application")
         break
     elif user_decision == "Y":
-        new_project.new_action(new_user.email) # user.email will be added
+        new_project.new_action(new_user.email)
     else:
         print("invalid, Try again")
 

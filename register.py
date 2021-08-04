@@ -38,10 +38,10 @@ class User:
         regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
         global email
         self.email = input("Enter your Email:")
-        j=1
+        j = 1
         Flag = 0
-        while (ws.cell(j,3).value is not None):
-            if ws.cell(j,3).value == self.email:
+        while (ws.cell(j, 3).value is not None):
+            if ws.cell(j, 3).value == self.email:
                 print("This email is already registered")
                 Flag += 1
                 self.get_user_email()
@@ -95,21 +95,20 @@ class User:
         Pattern = re.compile("(01)?[0-2][0-9]{8}")
         return Pattern.match(s)
 
-
     # login starts from here
     def login(self):
         self.email = input("please enter your email to login : ")
         password = str(input("please enter your password to login : "))
 
         for row in ws.iter_rows(min_row=2, max_row=100, min_col=3, max_col=4, values_only=True):
-            if row[0] == self.email and row[1] == password:
+            if row[0] == self.email and str(row[1]) == password:
                 print("login successfully")
+                break
                 # take action function call
-            else:
-                print("Invalid email or password")
-                x = int(input("To try again press (1)   For Registration press (2)   "))
-                if x == 1:
-                    self.login()
-                if x == 2:
-                    self.get_user_fname()
-
+        else:
+            print("Invalid email or password")
+            x = int(input("To try again press (1)   For Registration press (2)   "))
+            if x == 1:
+                self.login()
+            if x == 2:
+                self.get_user_fname()
