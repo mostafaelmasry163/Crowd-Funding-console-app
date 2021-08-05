@@ -4,10 +4,8 @@ import datetime
 
 
 class Project:
-    def __init__(self, user_mail):
-        self.user_mail = user_mail
 
-    def new_action(self):
+    def new_action(self, email):
         try:
             decision = int(input(f'please choose what do you want to do : \n '
                                  f'Enter 1 for creating new project.\n'
@@ -17,10 +15,10 @@ class Project:
                                  f' type here : '))
         except:
             print("invalid, try again ")
-            self.new_action()
+            self.new_action(email)
         else:
             if decision == 1:
-                self.create()
+                self.create(email)
             elif decision == 2:
                 allprojects = self.view()
                 allprojectskeys = allprojects.keys()
@@ -43,9 +41,9 @@ class Project:
                 self.search_by_date()
             else:
                 print("invalid, try again ")
-                self.new_action()
+                self.new_action(email)
 
-    def create(self):
+    def create(self, email):
         # clearing console
         os.system('clear')
         # Open File
@@ -99,7 +97,7 @@ class Project:
                 user_start_date = input("please, enter project start date in form [Day/Month/Year] :  ")
         os.system('clear')
 
-        # Get campaign start date
+        # Get campaign end date
         user_end_date = input("please, enter project end date in form [Day/Month/Year] :  ")
         condition2 = True
         while condition2:
@@ -127,7 +125,7 @@ class Project:
         i = 1
         while projects_sheet.cell(i, 6).value is not None:
             i += 1
-        projects_sheet.cell(i, 6).value = self.user_mail
+        projects_sheet.cell(i, 6).value = email
         projects_sheet.cell(i, 1).value = title
         projects_sheet.cell(i, 2).value = details
         projects_sheet.cell(i, 3).value = total_target
