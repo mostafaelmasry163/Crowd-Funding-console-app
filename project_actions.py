@@ -22,6 +22,7 @@ class Project:
             if decision == 1:
                 self.create(email)
             elif decision == 2:
+                # viewing all projects
                 allprojects = self.view()
                 allprojectskeys = allprojects.keys()
                 print(f'All projects informations \n')
@@ -32,12 +33,13 @@ class Project:
                     startdate = allprojects.__getitem__(key).get('startDate')
                     enddate = allprojects.__getitem__(key).get('endDate')
                     print(f'{key} information is : \n'
-                        f'Project title : {title}  \n'
-                        f'Project details : {details}  \n'
-                        f'Project total target : {total}  \n'
-                        f'Project start date and end date:  {startdate}  ,  {enddate}\n'
-                        f'--------------------------------  \n')
+                          f'Project title : {title}  \n'
+                          f'Project details : {details}  \n'
+                          f'Project total target : {total}  \n'
+                          f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                          f'--------------------------------  \n')
             elif decision == 3:
+                # filter view by user email(projects by the user)
                 allprojects = self.view()
                 allprojectskeys = allprojects.keys()
                 for key in allprojectskeys:
@@ -55,10 +57,23 @@ class Project:
                               f'Project total target : {total}  \n'
                               f'Project start date and end date:  {startdate}  ,  {enddate}\n'
                               f'--------------------------------  \n')
+                    else:
+                        print("no projects to show")
             elif decision == 4:
-                self.search_by_date()
+                self.edit()
             elif decision == 5:
-                self.delete()
+                # delete project
+                project_name = input(
+                    "please enter the project name you want to delete: ")
+                answer = input(
+                    f'Are you sure you want to delete {project_name}?(Y/N): ')
+                if answer.upper() == 'Y':
+                    self.delete(project_name)
+                elif answer.upper() == 'N':
+                    self.new_action(email)
+                else:
+                    print("invalid answer")
+                    self.new_action(email)
             elif decision == 6:
                 # Get search date
                 user_search_date = input(
@@ -70,7 +85,8 @@ class Project:
                             user_start_date, "%d/%m/%Y")
                         condition = False
                         if start_date_ob.date() < datetime.datetime.now().date():
-                            print("start date cannot be a previous date to today date ")
+                            print(
+                                "start date cannot be a previous date to today date ")
                             user_start_date = input(
                                 "please, enter project start date in form [Day/Month/Year] :  ")
                             condition = True
@@ -78,12 +94,12 @@ class Project:
                         print("invalid formula")
                         user_start_date = input(
                             "please, enter project start date in form [Day/Month/Year] :  ")
-
+                # filter view to show specific date
                 allprojects = self.view()
                 allprojectskeys = allprojects.keys()
                 for key in allprojectskeys:
                     saveddate = startdate = allprojects.__getitem__(
-                            key).get('startDate')
+                        key).get('startDate')
                     if user_search_date == saveddate:
                         title = allprojects.__getitem__(key).get('title')
                         details = allprojects.__getitem__(key).get('details')
@@ -140,35 +156,43 @@ class Project:
         os.system('clear')
 
         # Get campaign start date
-        user_start_date = input("please, enter project start date in form [Day/Month/Year] :  ")
+        user_start_date = input(
+            "please, enter project start date in form [Day/Month/Year] :  ")
         condition = True
         while condition:
             try:
-                start_date_ob = datetime.datetime.strptime(user_start_date, "%d/%m/%Y")
+                start_date_ob = datetime.datetime.strptime(
+                    user_start_date, "%d/%m/%Y")
                 condition = False
                 if start_date_ob.date() < datetime.datetime.now().date():
                     print("start date cannot be a previous date to today date ")
-                    user_start_date = input("please, enter project start date in form [Day/Month/Year] :  ")
+                    user_start_date = input(
+                        "please, enter project start date in form [Day/Month/Year] :  ")
                     condition = True
             except:
                 print("invalid formula")
-                user_start_date = input("please, enter project start date in form [Day/Month/Year] :  ")
+                user_start_date = input(
+                    "please, enter project start date in form [Day/Month/Year] :  ")
         os.system('clear')
 
         # Get campaign end date
-        user_end_date = input("please, enter project end date in form [Day/Month/Year] :  ")
+        user_end_date = input(
+            "please, enter project end date in form [Day/Month/Year] :  ")
         condition2 = True
         while condition2:
             try:
-                end_date_ob = datetime.datetime.strptime(user_end_date, "%d/%m/%Y")
+                end_date_ob = datetime.datetime.strptime(
+                    user_end_date, "%d/%m/%Y")
                 condition2 = False
                 if end_date_ob.date() < start_date_ob.date():
                     print("end date cannot be a previous date to project start date ")
-                    user_end_date = input("please, enter project end date in form [Day/Month/Year] :  ")
+                    user_end_date = input(
+                        "please, enter project end date in form [Day/Month/Year] :  ")
                     condition2 = True
             except:
                 print("invalid formula")
-                user_end_date = input("please, enter project end date in form [Day/Month/Year] :  ")
+                user_end_date = input(
+                    "please, enter project end date in form [Day/Month/Year] :  ")
         os.system('clear')
 
         # showing project data
@@ -210,11 +234,8 @@ class Project:
             allProjectsDictionry[projectDictionry['title']] = projectDictionry
         return allProjectsDictionry
 
-    def delete(self):
+    def delete(name, email):
         print("delete")
 
-    def search_by_date(self):
+    def edit(self):
         print("search")
-
-
-
