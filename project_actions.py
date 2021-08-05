@@ -38,9 +38,65 @@ class Project:
                         f'Project start date and end date:  {startdate}  ,  {enddate}\n'
                         f'--------------------------------  \n')
             elif decision == 3:
-                self.delete()
+                allprojects = self.view()
+                allprojectskeys = allprojects.keys()
+                for key in allprojectskeys:
+                    savedemail = allprojects.__getitem__(key).get('email')
+                    if email == savedemail:
+                        title = allprojects.__getitem__(key).get('title')
+                        details = allprojects.__getitem__(key).get('details')
+                        total = allprojects.__getitem__(key).get('total')
+                        startdate = allprojects.__getitem__(
+                            key).get('startDate')
+                        enddate = allprojects.__getitem__(key).get('endDate')
+                        print(f'{key} information is : \n'
+                              f'Project title : {title}  \n'
+                              f'Project details : {details}  \n'
+                              f'Project total target : {total}  \n'
+                              f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                              f'--------------------------------  \n')
             elif decision == 4:
                 self.search_by_date()
+            elif decision == 5:
+                self.delete()
+            elif decision == 6:
+                # Get search date
+                user_search_date = input(
+                    "please, enter project start date you want to search in form [Day/Month/Year] :  ")
+                condition = True
+                while condition:
+                    try:
+                        start_date_ob = datetime.datetime.strptime(
+                            user_start_date, "%d/%m/%Y")
+                        condition = False
+                        if start_date_ob.date() < datetime.datetime.now().date():
+                            print("start date cannot be a previous date to today date ")
+                            user_start_date = input(
+                                "please, enter project start date in form [Day/Month/Year] :  ")
+                            condition = True
+                    except:
+                        print("invalid formula")
+                        user_start_date = input(
+                            "please, enter project start date in form [Day/Month/Year] :  ")
+
+                allprojects = self.view()
+                allprojectskeys = allprojects.keys()
+                for key in allprojectskeys:
+                    saveddate = startdate = allprojects.__getitem__(
+                            key).get('startDate')
+                    if user_search_date == saveddate:
+                        title = allprojects.__getitem__(key).get('title')
+                        details = allprojects.__getitem__(key).get('details')
+                        total = allprojects.__getitem__(key).get('total')
+                        startdate = allprojects.__getitem__(
+                            key).get('startDate')
+                        enddate = allprojects.__getitem__(key).get('endDate')
+                        print(f'{key} information is : \n'
+                              f'Project title : {title}  \n'
+                              f'Project details : {details}  \n'
+                              f'Project total target : {total}  \n'
+                              f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                              f'--------------------------------  \n')
             else:
                 print("invalid, try again ")
                 self.new_action(email)
@@ -148,7 +204,8 @@ class Project:
                     'details': projects_sheet.cell(project_row, 2).value,
                     'total': projects_sheet.cell(project_row, 3).value,
                     'startDate': projects_sheet.cell(project_row, 4).value,
-                    'endDate': projects_sheet.cell(project_row, 5).value
+                    'endDate': projects_sheet.cell(project_row, 5).value,
+                    'email': projects_sheet.cell(project_row, 6).value
                 }
             allProjectsDictionry[projectDictionry['title']] = projectDictionry
         return allProjectsDictionry
