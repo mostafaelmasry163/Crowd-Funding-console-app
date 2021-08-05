@@ -124,7 +124,20 @@ class Project:
         print("End of creation")
 
     def view(self):
-        print("view")
+        my_workbook = openpyxl.load_workbook("projects_data.xlsx")
+        projects_sheet = my_workbook["Sheet1"]
+        allProjectsDictionry = {}
+        for project_row in range(2, projects_sheet.max_row+1):
+            for project_col in range(1, 6):
+                projectDictionry = {
+                    'title': projects_sheet.cell(project_row, 1).value,
+                    'details': projects_sheet.cell(project_row, 2).value,
+                    'total': projects_sheet.cell(project_row, 3).value,
+                    'startDate': projects_sheet.cell(project_row, 4).value,
+                    'endDate': projects_sheet.cell(project_row, 5).value
+                }
+            allProjectsDictionry[projectDictionry['title']] = projectDictionry
+        return allProjectsDictionry
 
     def delete(self):
         print("delete")
