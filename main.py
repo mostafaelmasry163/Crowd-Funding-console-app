@@ -28,10 +28,10 @@ while True:
                           "Enter Y for yes \n"
                           "Enter N for No \n"
                           "Type here : ")
-    if user_decision == "N":
+    if user_decision.upper() == "N":
         print("thanks for using our application")
         break
-    elif user_decision == "Y":
+    elif user_decision.upper() == "Y":
         new_project.new_action(new_user.email)
     else:
         print("invalid, Try again")

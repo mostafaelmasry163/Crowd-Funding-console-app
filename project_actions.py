@@ -10,8 +10,10 @@ class Project:
             decision = int(input(f'please choose what do you want to do : \n '
                                  f'Enter 1 for creating new project.\n'
                                  f' Enter 2 for viewing all projects. \n'
-                                 f' Enter 3 for deleting one of your projects.\n'
-                                 f' Enter 4 for searching for a project by its date.\n'
+                                 f' Enter 3 for viewing all your projects. \n'
+                                 f' Enter 4 for edit your projects. \n'
+                                 f' Enter 5 for deleting one of your projects.\n'
+                                 f' Enter 6 for searching a project by its date.\n'
                                  f' type here : '))
         except:
             print("invalid, try again ")
