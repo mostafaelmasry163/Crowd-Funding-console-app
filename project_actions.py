@@ -22,7 +22,21 @@ class Project:
             if decision == 1:
                 self.create()
             elif decision == 2:
-                self.view()
+                allprojects = self.view()
+                allprojectskeys = allprojects.keys()
+                print(f'All projects informations \n')
+                for key in allprojectskeys:
+                    title = allprojects.__getitem__(key).get('title')
+                    details = allprojects.__getitem__(key).get('details')
+                    total = allprojects.__getitem__(key).get('total')
+                    startdate = allprojects.__getitem__(key).get('startDate')
+                    enddate = allprojects.__getitem__(key).get('endDate')
+                    print(f'{key} information is : \n'
+                        f'Project title : {title}  \n'
+                        f'Project details : {details}  \n'
+                        f'Project total target : {total}  \n'
+                        f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                        f'--------------------------------  \n')
             elif decision == 3:
                 self.delete()
             elif decision == 4:
