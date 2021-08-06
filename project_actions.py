@@ -28,11 +28,13 @@ class Project:
                 print(f'All projects informations \n')
                 for key in allprojectskeys:
                     title = allprojects.__getitem__(key).get('title')
+                    owner = allprojects.__getitem__(key).get('email')
                     details = allprojects.__getitem__(key).get('details')
                     total = allprojects.__getitem__(key).get('total')
                     startdate = allprojects.__getitem__(key).get('startDate')
                     enddate = allprojects.__getitem__(key).get('endDate')
-                    print(f'{key} information is : \n'
+                    print(f'{key} project information is : \n'
+                          f'Project owner : {owner}  \n'
                           f'Project title : {title}  \n'
                           f'Project details : {details}  \n'
                           f'Project total target : {total}  \n'
@@ -51,29 +53,20 @@ class Project:
                         startdate = allprojects.__getitem__(
                             key).get('startDate')
                         enddate = allprojects.__getitem__(key).get('endDate')
-                        print(f'{key} information is : \n'
+                        print(f'{key} project information is : \n'
+                              f'Project owner : You  \n'
                               f'Project title : {title}  \n'
                               f'Project details : {details}  \n'
                               f'Project total target : {total}  \n'
                               f'Project start date and end date:  {startdate}  ,  {enddate}\n'
                               f'--------------------------------  \n')
-                    else:
-                        print("no projects to show")
             elif decision == 4:
                 self.edit()
             elif decision == 5:
                 # delete project
                 project_name = input(
                     "please enter the project name you want to delete: ")
-                answer = input(
-                    f'Are you sure you want to delete {project_name}?(Y/N): ')
-                if answer.upper() == 'Y':
-                    self.delete(project_name)
-                elif answer.upper() == 'N':
-                    self.new_action(email)
-                else:
-                    print("invalid answer")
-                    self.new_action(email)
+                self.delete(project_name,email)
             elif decision == 6:
                 # Get search date
                 user_search_date = input(
@@ -234,8 +227,37 @@ class Project:
             allProjectsDictionry[projectDictionry['title']] = projectDictionry
         return allProjectsDictionry
 
-    def delete(name, email):
-        print("delete")
+    def delete(self, name, email):        
+         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
+         projects_sheet = my_workbook["Sheet1"]
+         allprojectsnames = []
+         allprojectsemails = []
+         for project_row in range(2, projects_sheet.max_row+1):
+             allprojectsnames.append(projects_sheet.cell(project_row, 1).value)
+             allprojectsemails.append(
+                 projects_sheet.cell(project_row, 6).value)
+         if (name in allprojectsnames) & (email in allprojectsemails) :
+             if allprojectsnames.index(name) == allprojectsemails.index(email):
+                 answer = input(
+                    f'Are you sure you want to delete {name} project?(Y/N): ')
+                 if answer.upper() == 'Y':
+                    projects_sheet.delete_rows(allprojectsnames.index(name)+2)
+                    my_workbook.save("projects_data.xlsx")
+                    print("project deleted")
+                 elif answer.upper() == 'N':
+                     return 
+             else :
+                 print("you don't own this project")
+         else :
+             print("project name is not found")
+            
+            
+            
+            # if name == projects_sheet.cell(project_row, 1).value:
+            #     if email == projects_sheet.cell(project_row, 6).value:
+            #         projects_sheet.delete_rows(project_row)
+            #         my_workbook.save("projects_data.xlsx")
+            #         print("project deleted \n")
 
     def edit(self):
-        print("search")
+        print("edit")
