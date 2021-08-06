@@ -4,7 +4,7 @@ import datetime
 
 
 class Project:
-
+    
     def new_action(self, email):
         try:
             decision = int(input(f'please choose what do you want to do : \n '
@@ -61,7 +61,10 @@ class Project:
                               f'Project start date and end date:  {startdate}  ,  {enddate}\n'
                               f'--------------------------------  \n')
             elif decision == 4:
-                self.edit()
+                #edit project
+                project_name = input(
+                    "please enter the project name you want to edit: ")
+                self.edit(project_name, email)
             elif decision == 5:
                 # delete project
                 project_name = input(
@@ -110,13 +113,12 @@ class Project:
                 print("invalid, try again ")
                 self.new_action(email)
 
-    def create(self, email):
-        # clearing console
-        os.system('clear')
+    def create(self, email, indx=0):
         # Open File
         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
         projects_sheet = my_workbook["Sheet1"]
-
+        # clearing console
+        os.system('clear')
         # Getting project title and make sure that there is no similar title and it is not empty
         j = 1
         title = input("please, enter project title :  ")
@@ -197,20 +199,29 @@ class Project:
               f'Project start date and end date :  {user_start_date}  ,  {user_end_date}')
 
         # writing data
-        i = 1
-        while projects_sheet.cell(i, 6).value is not None:
-            i += 1
-        projects_sheet.cell(i, 6).value = email
-        projects_sheet.cell(i, 1).value = title
-        projects_sheet.cell(i, 2).value = details
-        projects_sheet.cell(i, 3).value = total_target
-        projects_sheet.cell(i, 4).value = user_start_date
-        projects_sheet.cell(i, 5).value = user_end_date
+        # i = projects_sheet.max_row
+        if indx == 0 :
+            indx = 1
+            while projects_sheet.cell(indx, 6).value is not None:
+                indx += 1
+            projects_sheet.cell(indx, 1).value = title
+            projects_sheet.cell(indx, 2).value = details
+            projects_sheet.cell(indx, 3).value = total_target
+            projects_sheet.cell(indx, 4).value = user_start_date
+            projects_sheet.cell(indx, 5).value = user_end_date
+            projects_sheet.cell(indx, 6).value = email
+            print("End of creation")
+        else :
+            projects_sheet.cell(indx, 1).value = title
+            projects_sheet.cell(indx, 2).value = details
+            projects_sheet.cell(indx, 3).value = total_target
+            projects_sheet.cell(indx, 4).value = user_start_date
+            projects_sheet.cell(indx, 5).value = user_end_date
+            projects_sheet.cell(indx, 6).value = email
         my_workbook.save("projects_data.xlsx")
-
-        print("End of creation")
-
+  
     def view(self):
+        # Open File
         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
         projects_sheet = my_workbook["Sheet1"]
         allProjectsDictionry = {}
@@ -227,37 +238,52 @@ class Project:
             allProjectsDictionry[projectDictionry['title']] = projectDictionry
         return allProjectsDictionry
 
-    def delete(self, name, email):        
-         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
-         projects_sheet = my_workbook["Sheet1"]
-         allprojectsnames = []
-         allprojectsemails = []
-         for project_row in range(2, projects_sheet.max_row+1):
-             allprojectsnames.append(projects_sheet.cell(project_row, 1).value)
-             allprojectsemails.append(
-                 projects_sheet.cell(project_row, 6).value)
-         if (name in allprojectsnames) & (email in allprojectsemails) :
-             if allprojectsnames.index(name) == allprojectsemails.index(email):
-                 answer = input(
-                    f'Are you sure you want to delete {name} project?(Y/N): ')
-                 if answer.upper() == 'Y':
+    def delete(self, name, email): 
+        # Open File
+        my_workbook = openpyxl.load_workbook("projects_data.xlsx")
+        projects_sheet = my_workbook["Sheet1"]       
+        allprojectsnames = []
+        allprojectsemails = []
+        for project_row in range(2, projects_sheet.max_row+1):
+            allprojectsnames.append(projects_sheet.cell(project_row, 1).value)
+            allprojectsemails.append(
+                projects_sheet.cell(project_row, 6).value)
+        if (email in allprojectsemails) & (name in allprojectsnames):
+            if email == allprojectsemails[allprojectsnames.index(name)]:
+                answer = input(
+                f'Are you sure you want to delete {name} project?(Y/N): ')
+                if answer.upper() == 'Y':
                     projects_sheet.delete_rows(allprojectsnames.index(name)+2)
                     my_workbook.save("projects_data.xlsx")
                     print("project deleted")
-                 elif answer.upper() == 'N':
-                     return 
-             else :
-                 print("you don't own this project")
-         else :
-             print("project name is not found")
-            
-            
-            
-            # if name == projects_sheet.cell(project_row, 1).value:
-            #     if email == projects_sheet.cell(project_row, 6).value:
-            #         projects_sheet.delete_rows(project_row)
-            #         my_workbook.save("projects_data.xlsx")
-            #         print("project deleted \n")
+                elif answer.upper() == 'N':
+                    return 
+            else :
+                print("you don't own this project")
+        else :
+            print("project name is not found")
 
-    def edit(self):
-        print("edit")
+    def edit(self, name,email):
+        # Open File
+        my_workbook = openpyxl.load_workbook("projects_data.xlsx")
+        projects_sheet = my_workbook["Sheet1"]
+        allprojectsnames = []
+        allprojectsemails = []
+        for project_row in range(2, projects_sheet.max_row+1):
+            allprojectsnames.append(projects_sheet.cell(project_row, 1).value)
+            allprojectsemails.append(
+                projects_sheet.cell(project_row, 6).value)
+        if (email in allprojectsemails) & (name in allprojectsnames):
+            if email == allprojectsemails[allprojectsnames.index(name)]:
+                answer = input(
+                f'Are you sure you want to edit {name} project?(Y/N): ')
+                if answer.upper() == 'Y':
+                    self.create(email, allprojectsnames.index(name)+2)
+                    my_workbook.save("projects_data.xlsx")
+                    print("project edited")
+                elif answer.upper() == 'N':
+                    return
+            else:
+                print("you don't own this project")
+        else:
+            print("project name is not found")
