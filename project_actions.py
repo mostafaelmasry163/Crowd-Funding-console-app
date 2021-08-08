@@ -4,7 +4,7 @@ import datetime
 
 
 class Project:
-    
+
     def new_action(self, email):
         try:
             decision = int(input(f'please choose what do you want to do : \n '
@@ -20,56 +20,24 @@ class Project:
             self.new_action(email)
         else:
             if decision == 1:
+                # Create new project
                 self.create(email)
             elif decision == 2:
                 # viewing all projects
-                allprojects = self.view()
-                allprojectskeys = allprojects.keys()
-                print(f'All projects informations \n')
-                for key in allprojectskeys:
-                    title = allprojects.__getitem__(key).get('title')
-                    owner = allprojects.__getitem__(key).get('email')
-                    details = allprojects.__getitem__(key).get('details')
-                    total = allprojects.__getitem__(key).get('total')
-                    startdate = allprojects.__getitem__(key).get('startDate')
-                    enddate = allprojects.__getitem__(key).get('endDate')
-                    print(f'{key} project information is : \n'
-                          f'Project owner : {owner}  \n'
-                          f'Project title : {title}  \n'
-                          f'Project details : {details}  \n'
-                          f'Project total target : {total}  \n'
-                          f'Project start date and end date:  {startdate}  ,  {enddate}\n'
-                          f'--------------------------------  \n')
+                print(f'All projects information \n')
+                self.view()
             elif decision == 3:
                 # filter view by user email(projects by the user)
-                allprojects = self.view()
-                allprojectskeys = allprojects.keys()
-                for key in allprojectskeys:
-                    savedemail = allprojects.__getitem__(key).get('email')
-                    if email == savedemail:
-                        title = allprojects.__getitem__(key).get('title')
-                        details = allprojects.__getitem__(key).get('details')
-                        total = allprojects.__getitem__(key).get('total')
-                        startdate = allprojects.__getitem__(
-                            key).get('startDate')
-                        enddate = allprojects.__getitem__(key).get('endDate')
-                        print(f'{key} project information is : \n'
-                              f'Project owner : You  \n'
-                              f'Project title : {title}  \n'
-                              f'Project details : {details}  \n'
-                              f'Project total target : {total}  \n'
-                              f'Project start date and end date:  {startdate}  ,  {enddate}\n'
-                              f'--------------------------------  \n')
+                self.view(email)
             elif decision == 4:
-                #edit project
-                project_name = input(
-                    "please enter the project name you want to edit: ")
+                # Edit project
+                project_name = input("please enter the project name you want to edit: ")
                 self.edit(project_name, email)
             elif decision == 5:
                 # delete project
                 project_name = input(
                     "please enter the project name you want to delete: ")
-                self.delete(project_name,email)
+                self.delete(project_name, email)
             elif decision == 6:
                 # Get search date
                 user_search_date = input(
@@ -78,37 +46,14 @@ class Project:
                 while condition:
                     try:
                         start_date_ob = datetime.datetime.strptime(
-                            user_start_date, "%d/%m/%Y")
+                            user_search_date, "%d/%m/%Y")
                         condition = False
-                        if start_date_ob.date() < datetime.datetime.now().date():
-                            print(
-                                "start date cannot be a previous date to today date ")
-                            user_start_date = input(
-                                "please, enter project start date in form [Day/Month/Year] :  ")
-                            condition = True
                     except:
                         print("invalid formula")
-                        user_start_date = input(
+                        user_search_date = input(
                             "please, enter project start date in form [Day/Month/Year] :  ")
                 # filter view to show specific date
-                allprojects = self.view()
-                allprojectskeys = allprojects.keys()
-                for key in allprojectskeys:
-                    saveddate = startdate = allprojects.__getitem__(
-                        key).get('startDate')
-                    if user_search_date == saveddate:
-                        title = allprojects.__getitem__(key).get('title')
-                        details = allprojects.__getitem__(key).get('details')
-                        total = allprojects.__getitem__(key).get('total')
-                        startdate = allprojects.__getitem__(
-                            key).get('startDate')
-                        enddate = allprojects.__getitem__(key).get('endDate')
-                        print(f'{key} information is : \n'
-                              f'Project title : {title}  \n'
-                              f'Project details : {details}  \n'
-                              f'Project total target : {total}  \n'
-                              f'Project start date and end date:  {startdate}  ,  {enddate}\n'
-                              f'--------------------------------  \n')
+                self.view(email, user_search_date)
             else:
                 print("invalid, try again ")
                 self.new_action(email)
@@ -200,86 +145,131 @@ class Project:
 
         # writing data
         # i = projects_sheet.max_row
-        if indx == 0 :
+        if indx == 0:
             indx = 1
             while projects_sheet.cell(indx, 6).value is not None:
                 indx += 1
-            projects_sheet.cell(indx, 1).value = title
-            projects_sheet.cell(indx, 2).value = details
-            projects_sheet.cell(indx, 3).value = total_target
-            projects_sheet.cell(indx, 4).value = user_start_date
-            projects_sheet.cell(indx, 5).value = user_end_date
-            projects_sheet.cell(indx, 6).value = email
+            self.write_in_xl(indx, title, details, total_target, user_start_date, user_end_date, email)
             print("End of creation")
-        else :
-            projects_sheet.cell(indx, 1).value = title
-            projects_sheet.cell(indx, 2).value = details
-            projects_sheet.cell(indx, 3).value = total_target
-            projects_sheet.cell(indx, 4).value = user_start_date
-            projects_sheet.cell(indx, 5).value = user_end_date
-            projects_sheet.cell(indx, 6).value = email
-        my_workbook.save("projects_data.xlsx")
-  
-    def view(self):
+        else:
+            self.write_in_xl(indx, title, details, total_target, user_start_date, user_end_date, email)
+
+    def view(self, email='', date=''):
         # Open File
         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
         projects_sheet = my_workbook["Sheet1"]
-        allProjectsDictionry = {}
-        for project_row in range(2, projects_sheet.max_row+1):
-            for project_col in range(1, 6):
-                projectDictionry = {
-                    'title': projects_sheet.cell(project_row, 1).value,
-                    'details': projects_sheet.cell(project_row, 2).value,
-                    'total': projects_sheet.cell(project_row, 3).value,
-                    'startDate': projects_sheet.cell(project_row, 4).value,
-                    'endDate': projects_sheet.cell(project_row, 5).value,
-                    'email': projects_sheet.cell(project_row, 6).value
-                }
-            allProjectsDictionry[projectDictionry['title']] = projectDictionry
-        return allProjectsDictionry
 
-    def delete(self, name, email): 
+        if (email == '') & (date == ''):
+            for project_row in range(2, projects_sheet.max_row + 1):
+                title = projects_sheet.cell(project_row, 1).value
+                details = projects_sheet.cell(project_row, 2).value
+                total = projects_sheet.cell(project_row, 3).value
+                startdate = projects_sheet.cell(project_row, 4).value
+                enddate = projects_sheet.cell(project_row, 5).value
+                owner = projects_sheet.cell(project_row, 6).value
+                print(f'{title} project information is : \n'
+                      f'Project owner : {owner}  \n'
+                      f'Project title : {title}  \n'
+                      f'Project details : {details}  \n'
+                      f'Project total target : {total}  \n'
+                      f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                      f'--------------------------------  \n')
+        elif (date != '') & (email != ''):
+            print(f'All projects that starts in {date} \n')
+            allprojectsdates = []
+            for project_row in range(2, projects_sheet.max_row + 1):
+                allprojectsdates.append(
+                    projects_sheet.cell(project_row, 4).value)
+            if date not in allprojectsdates:
+                return print("date not found")
+            i = 0
+            while i < len(allprojectsdates):
+                if date == allprojectsdates[i]:
+                    title = projects_sheet.cell(i + 2, 1).value
+                    details = projects_sheet.cell(i + 2, 2).value
+                    total = projects_sheet.cell(i + 2, 3).value
+                    startdate = projects_sheet.cell(i + 2, 4).value
+                    enddate = projects_sheet.cell(i + 2, 5).value
+                    owner = projects_sheet.cell(i + 2, 6).value
+                    print(f'{title} project information is : \n'
+                          f'Project owner : {owner}  \n'
+                          f'Project title : {title}  \n'
+                          f'Project details : {details}  \n'
+                          f'Project total target : {total}  \n'
+                          f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                          f'--------------------------------  \n')
+                    i += 1
+                else:
+                    i += 1
+        elif (email != '') & (date == ''):
+            print(f'All your projects \n')
+            allprojectsemails = []
+            for project_row in range(2, projects_sheet.max_row + 1):
+                allprojectsemails.append(
+                    projects_sheet.cell(project_row, 6).value)
+            if email not in allprojectsemails:
+                return print("you don't have any projects")
+            i = 0
+            while i < len(allprojectsemails):
+                if email == allprojectsemails[i]:
+                    title = projects_sheet.cell(i + 2, 1).value
+                    details = projects_sheet.cell(i + 2, 2).value
+                    total = projects_sheet.cell(i + 2, 3).value
+                    startdate = projects_sheet.cell(i + 2, 4).value
+                    enddate = projects_sheet.cell(i + 2, 5).value
+                    owner = projects_sheet.cell(i + 2, 6).value
+                    print(f'{title} project information is : \n'
+                          f'Project owner : You  \n'
+                          f'Project title : {title}  \n'
+                          f'Project details : {details}  \n'
+                          f'Project total target : {total}  \n'
+                          f'Project start date and end date:  {startdate}  ,  {enddate}\n'
+                          f'--------------------------------  \n')
+                    i += 1
+                else:
+                    i += 1
+
+    def delete(self, name, email):
         # Open File
         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
-        projects_sheet = my_workbook["Sheet1"]       
+        projects_sheet = my_workbook["Sheet1"]
         allprojectsnames = []
         allprojectsemails = []
-        for project_row in range(2, projects_sheet.max_row+1):
+        for project_row in range(2, projects_sheet.max_row + 1):
             allprojectsnames.append(projects_sheet.cell(project_row, 1).value)
             allprojectsemails.append(
                 projects_sheet.cell(project_row, 6).value)
         if (email in allprojectsemails) & (name in allprojectsnames):
             if email == allprojectsemails[allprojectsnames.index(name)]:
                 answer = input(
-                f'Are you sure you want to delete {name} project?(Y/N): ')
+                    f'Are you sure you want to delete {name} project?(Y/N): ')
                 if answer.upper() == 'Y':
-                    projects_sheet.delete_rows(allprojectsnames.index(name)+2)
+                    projects_sheet.delete_rows(allprojectsnames.index(name) + 2)
                     my_workbook.save("projects_data.xlsx")
                     print("project deleted")
                 elif answer.upper() == 'N':
-                    return 
-            else :
+                    return
+            else:
                 print("you don't own this project")
-        else :
+        else:
             print("project name is not found")
 
-    def edit(self, name,email):
+    def edit(self, name, email):
         # Open File
         my_workbook = openpyxl.load_workbook("projects_data.xlsx")
         projects_sheet = my_workbook["Sheet1"]
         allprojectsnames = []
         allprojectsemails = []
-        for project_row in range(2, projects_sheet.max_row+1):
+        for project_row in range(2, projects_sheet.max_row + 1):
             allprojectsnames.append(projects_sheet.cell(project_row, 1).value)
             allprojectsemails.append(
                 projects_sheet.cell(project_row, 6).value)
         if (email in allprojectsemails) & (name in allprojectsnames):
             if email == allprojectsemails[allprojectsnames.index(name)]:
                 answer = input(
-                f'Are you sure you want to edit {name} project?(Y/N): ')
+                    f'Are you sure you want to edit {name} project?(Y/N): ')
                 if answer.upper() == 'Y':
-                    self.create(email, allprojectsnames.index(name)+2)
-                    my_workbook.save("projects_data.xlsx")
+                    self.create(email, allprojectsnames.index(name) + 2)
                     print("project edited")
                 elif answer.upper() == 'N':
                     return
@@ -287,3 +277,16 @@ class Project:
                 print("you don't own this project")
         else:
             print("project name is not found")
+
+    def write_in_xl(self, indx, title, details, total_target, user_start_date, user_end_date, email):
+        # Open File
+        my_workbook = openpyxl.load_workbook("projects_data.xlsx")
+        projects_sheet = my_workbook["Sheet1"]
+        indx = int(indx)
+        projects_sheet.cell(indx, 1).value = title
+        projects_sheet.cell(indx, 2).value = details
+        projects_sheet.cell(indx, 3).value = total_target
+        projects_sheet.cell(indx, 4).value = user_start_date
+        projects_sheet.cell(indx, 5).value = user_end_date
+        projects_sheet.cell(indx, 6).value = email
+        my_workbook.save("projects_data.xlsx")
