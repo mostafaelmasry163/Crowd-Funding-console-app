@@ -2,7 +2,6 @@ import openpyxl
 import os
 import datetime
 
-
 class Project:
 
     def new_action(self, email):
